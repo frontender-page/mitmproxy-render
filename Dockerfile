@@ -5,12 +5,16 @@ RUN pip install mitmproxy flask
 
 WORKDIR /app
 
-# Копируем аддон и скрипт для пинга
+# Копируем файлы
 COPY addon.py /app/addon.py
 COPY ping_server.py /app/ping_server.py
 
 # Открываем порты
-EXPOSE 8080 8081
+EXPOSE 8080
+EXPOSE 8081
 
-# Запускаем оба сервиса
-CMD ["sh", "-c", "python3 /app/ping_server.py & mitmdump -p 8080 -s /app/addon.py"]
+# Запускаем оба сервиса через обёртку
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
