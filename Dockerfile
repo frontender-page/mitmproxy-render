@@ -1,17 +1,16 @@
-# Базовый образ с Python
 FROM python:3.10-slim
 
-# Устанавливаем mitmproxy
-RUN pip install mitmproxy
+# Устанавливаем mitmproxy и Flask
+RUN pip install mitmproxy flask
 
-# Создаем рабочую директорию
 WORKDIR /app
 
-# Копируем аддон в контейнер
+# Копируем аддон и скрипт для пинга
 COPY addon.py /app/addon.py
+COPY ping_server.py /app/ping_server.py
 
-# Открываем порт для прокси
-EXPOSE 8080
+# Открываем порты
+EXPOSE 8080 8081
 
-# Запускаем mitmdump с аддоном
-CMD ["mitmdump", "-p", "8080", "-s", "/app/addon.py", "--set", "confdir=/app/.mitmproxy"]
+# Запускаем оба сервиса
+CMD ["sh", "-c", "python3 /app/ping_server.py & mitmdump -p 8080 -s /app/addon.py"]
