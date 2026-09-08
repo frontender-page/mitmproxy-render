@@ -4,7 +4,7 @@ FROM python:3.10-slim
 RUN pip install mitmproxy flask
 
 WORKDIR /app
-
+ 
 # Копируем файлы
 COPY addon.py /app/addon.py
 COPY ping_server.py /app/ping_server.py
